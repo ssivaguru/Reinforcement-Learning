@@ -1,2 +1,2 @@
 # Reinforcement Learning
- Implmentation of RL algorithms L based on Prof. sutton's book
+ Implmentation of RL algorithms based on Prof. sutton's book
