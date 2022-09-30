@@ -1,0 +1,3 @@
+[submodule "multi_arm_bandits"]
+	path = multi_arm_bandits
+	url = https://github.com/ssivaguru/Multi-Arm-bandits
