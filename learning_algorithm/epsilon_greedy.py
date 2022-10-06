@@ -5,7 +5,6 @@ from multi_arm_bandits import bandits
 
 class epsilonAgent():
     def __init__(self) -> None:
-        self.stepsize = 0.5
         pass
     
     def __choose_random(self):
@@ -16,17 +15,15 @@ class epsilonAgent():
         for i in range (arms):
             self.estimate.append(0)
     
-    def __update_estimate(self, arm, reward):
+    def __update_estimate(self, arm, reward, stepsize):
         cur = self.estimate[arm]
-
-
-        cur += cur + self.stepsize*(reward[0] - cur)
+        cur += cur + stepsize*(reward[0] - cur)
         self.estimate[arm] = cur
     
     def __choose_best_arm(self):
         return np.argmax(self.estimate)
 
-    def __choose_arm(self, epsilon, bandit):
+    def __choose_arm(self, epsilon, bandit, epoch):
 
         p = self.__choose_random()
         arm  = 0
@@ -37,7 +34,7 @@ class epsilonAgent():
 
         print(arm)
         reward = bandit.pullArm(arm)
-        self.__update_estimate(arm , reward)
+        self.__update_estimate(arm , reward, 1/epoch)
 
     def __step_reduce_epsilon(self, epsilon):
         return epsilon - 1
@@ -51,10 +48,11 @@ class epsilonAgent():
         
         arms = bandit.getNoArms()
         self.__create_reward_estimate(arms)
-        while epoch != 0:
-            self.__choose_arm(epsilon, bandit)
-            epoch = epoch - 1
-            if epoch % 200 == 0:
+        count = 1
+        while count != epoch:
+            self.__choose_arm(epsilon, bandit, count)
+            count+=1
+            if count % 200 == 0:
                 epsilon = self.__step_reduce_epsilon(epsilon)
     
     def printestimate(self):
