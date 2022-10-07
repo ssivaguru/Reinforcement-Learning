@@ -1,3 +1,4 @@
+##implementation of epsilon greedy algorithm
 
 import numpy as np
 from random import randrange
