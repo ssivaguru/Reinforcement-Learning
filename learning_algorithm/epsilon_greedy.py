@@ -2,6 +2,7 @@
 import numpy as np
 from random import randrange
 from multi_arm_bandits import bandits
+import time 
 
 class epsilonAgent():
     def __init__(self) -> None:
@@ -32,19 +33,22 @@ class epsilonAgent():
         else:
             arm = self.__choose_best_arm()
 
-        print(arm)
         reward = bandit.pullArm(arm)
         self.__update_estimate(arm , reward, 1/epoch)
 
+
     def __step_reduce_epsilon(self, epsilon):
-        return epsilon - 1
+        if epsilon <= 0.5:
+            return epsilon
+        print(epsilon)
+        return epsilon - 0.1
     
     def Run(self, epoch, bandit):
         if epoch < 100:
             print("Minimum expected epoche is 100")
             return
         
-        epsilon = 1
+        epsilon = 0.9
         
         arms = bandit.getNoArms()
         self.__create_reward_estimate(arms)
@@ -52,10 +56,9 @@ class epsilonAgent():
         while count != epoch:
             self.__choose_arm(epsilon, bandit, count)
             count+=1
-            if count % 200 == 0:
+            if count % 100 == 0:
                 epsilon = self.__step_reduce_epsilon(epsilon)
     
     def printestimate(self):
-        print("computed is")
         print(self.estimate)
 
