@@ -4,23 +4,15 @@ import numpy as np
 from random import randrange
 from multi_arm_bandits import bandits
 import time 
+from learning_algorithm.action_value import ActionValue 
+
 
 class epsilonAgent():
-    def __init__(self) -> None:
-        pass
-    
+    def __init__(self):
+        self.actionValue = ActionValue()
+        
     def __choose_random(self):
         return np.random.randn()
-
-    def __create_reward_estimate(self, arms):
-        self.estimate = []
-        for i in range (arms):
-            self.estimate.append(0)
-    
-    def __update_estimate(self, arm, reward, stepsize):
-        cur = self.estimate[arm]
-        cur += cur + stepsize*(reward[0] - cur)
-        self.estimate[arm] = cur
     
     def __choose_best_arm(self):
         return np.argmax(self.estimate)
@@ -32,16 +24,14 @@ class epsilonAgent():
         if p < epsilon:
             arm = randrange(bandit.getNoArms())
         else:
-            arm = self.__choose_best_arm()
-
+            arm = self.actionValue.getBestArm()
         reward = bandit.pullArm(arm)
-        self.__update_estimate(arm , reward, 1/epoch)
+        self.actionValue.updateEstimate(arm , reward, 0.6)
 
 
     def __step_reduce_epsilon(self, epsilon):
-        if epsilon <= 0.5:
+        if epsilon <= 0.3:
             return epsilon
-        print(epsilon)
         return epsilon - 0.1
     
     def Run(self, epoch, bandit):
@@ -52,14 +42,15 @@ class epsilonAgent():
         epsilon = 0.9
         
         arms = bandit.getNoArms()
-        self.__create_reward_estimate(arms)
+        self.actionValue.createRewardEstimates(arms)
         count = 1
         while count != epoch:
             self.__choose_arm(epsilon, bandit, count)
             count+=1
-            if count % 100 == 0:
+            if count % 300 == 0:
                 epsilon = self.__step_reduce_epsilon(epsilon)
     
-    def printestimate(self):
-        print(self.estimate)
+    def getBestEstimate(self):
+        return self.actionValue.getBestArm()
+    
 

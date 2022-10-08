@@ -4,9 +4,9 @@ import learning_algorithm.epsilon_greedy as egreedy
 
 def main():
     print("Hello world")
-    b1 = bandit.Bandit(5)
+    b1 = bandit.Bandit(10)
     agent = egreedy.epsilonAgent()
-    agent.Run(1000, b1)
-    b1.printestimate()
-    agent.printestimate()
+    agent.Run(3000, b1)
+    print(b1.getBestArm())
+    print(agent.getBestEstimate())
 main()
