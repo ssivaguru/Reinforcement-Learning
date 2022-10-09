@@ -18,9 +18,13 @@ class ActionValue():
         self.estimate[index] = cur
 
     def getBestArm(self):
+        print(self.estimate)
         return np.argmax(self.estimate)
     
     def printestimate(self):
         print(self.estimate)
+
+    def getEstimates(self):
+        return self.estimate
 
     
