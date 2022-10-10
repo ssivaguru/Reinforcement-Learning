@@ -14,11 +14,10 @@ class ActionValue():
 
     def updateEstimate(self, index, reward, stepsize):
         cur = self.estimate[index]
-        cur += cur + stepsize*(reward[0] - cur)
+        cur += stepsize*(reward[0] - cur)
         self.estimate[index] = cur
 
     def getBestArm(self):
-        print(self.estimate)
         return np.argmax(self.estimate)
     
     def printestimate(self):
