@@ -26,7 +26,8 @@ class epsilonAgent():
         else:
             arm = self.actionValue.getBestArm()
         reward = bandit.pullArm(arm)
-        self.actionValue.updateEstimate(arm , reward, 0.6)
+        stepsize = 1 / ( (epoch/ 50) + 1 )
+        self.actionValue.updateEstimate(arm , reward, stepsize)
 
 
     def __step_reduce_epsilon(self, epsilon):
